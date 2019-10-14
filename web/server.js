@@ -19,7 +19,7 @@ app.get('/', async (req, res) => {
   });
 });
 
-//app.get('/status', getStatusController}); ici je dois faire une connexion faire la base de données redis et retourner un autre json
+//app.get('/status', async (req, res) => { }); ici je dois faire une connexion vers la base de données redis et retourner un autre json
 
 
 app.listen(PORT, () => {
