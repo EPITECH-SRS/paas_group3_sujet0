@@ -6,4 +6,4 @@
 * An API (here in NodeJS)
 * A PostgreSQL DB
 * A Redis DB
-* User docker and docker-compose
+* Use docker and docker-compose
