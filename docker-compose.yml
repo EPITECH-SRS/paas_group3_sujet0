@@ -8,7 +8,7 @@ services:
       - "8000"
     depends_on:
       - db_postgres
-     # - redis
+      - redis
     env_file: .env
     environment:
       DB_HOST: db_postgres
@@ -21,10 +21,12 @@ services:
       - projetsad
 
   nginx:
+    container_name: nginx
     restart: always
     build: ./nginx/
     ports:
-      - "80:80"
+      - "8000:8000"
+      - "5555:5555"
     volumes:
       - ./web:/data/web
     depends_on:
@@ -33,13 +35,11 @@ services:
       - projetsad
 
   db_postgres:
+    container_name: db_postgres
     restart: always
-    build: ./postgres/
-    #image: postgres:latest
+    image: postgres:latest
     volumes:
       - ./postgres:/var/lib/postgresql/data
-      #- ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-      #- ./backups/postgresql:/backup
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_USER: postgres
@@ -49,20 +49,27 @@ services:
     networks:
       - projetsad
   
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    depends_on:
+      - db_postgres
+    expose:
+      - "5555"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin@pgadmin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 5555
+    networks:
+      - projetsad  
+
   redis:
+    container_name: redis
     restart: always
     image: redis:latest
     expose:
       - "6379"
-    networks:
-      - projetsad
-
-  data:
-    restart: always
-    image: alpine
-    volumes:
-      - /var/lib/postgresql
-    command: "true"
     networks:
       - projetsad
 
