@@ -15,7 +15,8 @@ services:
     volumes:
       - ./web:/data/web
       - /usr/app/node_modules
-    command: ["./wait-for-it.sh", "db_postgres:5432", "--", "node", "server.js"]
+    # command: ["./wait-for-it.sh", "db_postgres:5432", "--", "node", "server.js"]
+    command: ["./wait-for-it.sh", "db_postgres:5432", "--", "npm","run","dev"]
     networks:
       - projetsad
 
