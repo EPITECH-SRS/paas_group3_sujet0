@@ -9,7 +9,6 @@ services:
     depends_on:
       - db_postgres
       - redis
-    env_file: .env
     environment:
       DB_HOST: db_postgres
       REDIS_HOST: redis
