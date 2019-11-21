@@ -40,8 +40,8 @@ services:
     restart: always
     image: postgres:latest
     volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./postgres:/var/lib/postgresql/data
-      - ./postgres:/docker-entrypoint-initdb.d/init.sql
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_USER: postgres
