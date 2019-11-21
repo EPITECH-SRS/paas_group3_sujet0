@@ -12,6 +12,7 @@ services:
     environment:
       DB_HOST: db_postgres
       REDIS_HOST: redis
+      REDIS_PORT: 6379
     volumes:
       - ./web:/data/web
       - /usr/app/node_modules
