@@ -10,6 +10,13 @@ client.on('error', function(err) {
 });
 
 const connectREDIS = async (req,res) => {
+	var redisStatus = dbName = "";
+	client.ping(function(err,reply) {
+		if (err) { console.log(err); }
+		console.log(reply);
+		if (reply == "PONG") { redisStatus="OK"; }
+		else { redisStatus = "KO"; }
+	});
 	client.set("dbName", "redisDB", function(err,reply) {
 	if (err) { console.log(err); }
 	console.log(reply);
@@ -17,19 +24,21 @@ const connectREDIS = async (req,res) => {
 	client.get("dbName", function(err,reply) {
 	if (err) { console.log(err); }
 	console.log(reply);
-	const redisDBname = reply;
+	redisDBname = reply;
 	});
 	client.info("clients", function(err, reply) {
 	  if (err) { console.log('Error on redis : ' + err); }
-          console.log(reply);
+      console.log(reply);
 	  console.log(typeof(reply));
-	  const connectedClients=reply;
-	});
-	res.json({
-        	"status": "OK",
+	  const search = "connected_clients:";
+	  const index = reply.indexOf(search);
+	  const nbClients = reply.charAt(search.length + index);
+	  res.json({
+        "status": redisStatus,
 		"dbName": redisDBname,
-		"redisConnectedClients": connectedClients
+		"redisConnectedClients": nbClients
     	});
+	});
 };
 
 module.exports = {
