@@ -7,17 +7,17 @@ services:
     expose:
       - "8000"
     depends_on:
-      - db_postgres
+      - db-postgres
       - redis
     environment:
-      DB_HOST: db_postgres
+      DB_HOST: db-postgres
       REDIS_HOST: redis
       REDIS_PORT: 6379
     volumes:
       - ./web:/data/web
       - /usr/app/node_modules
     # command: ["./wait-for-it.sh", "db_postgres:5432", "--", "node", "server.js"]
-    command: ["./wait-for-it.sh", "db_postgres:5432", "--", "npm","run","dev"]
+    command: ["./wait-for-it.sh", "db-postgres:5432", "--", "npm","run","dev"]
     networks:
       - projetsad
 
@@ -28,15 +28,13 @@ services:
     ports:
       - "8000:8000"
       - "5555:5555"
-    volumes:
-      - ./web:/data/web
     depends_on:
       - web
     networks:
       - projetsad
 
-  db_postgres:
-    container_name: db_postgres
+  db-postgres:
+    container_name: db-postgres
     restart: always
     image: postgres:latest
     volumes:
@@ -56,7 +54,7 @@ services:
     image: dpage/pgadmin4
     restart: always
     depends_on:
-      - db_postgres
+      - db-postgres
     expose:
       - "5555"
     environment:
