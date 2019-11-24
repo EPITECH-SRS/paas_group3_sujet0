@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: redis
-  name: redis-deployment
+  name: redis
 spec:
   selector:
     matchLabels:

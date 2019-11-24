@@ -1,36 +1,37 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: db-postgres
   labels:
     app: db-postgres
-  name: db-postgres-deployment
 spec:
   selector:
     matchLabels:
       app: db-postgres
   replicas: 1
-  strategy:
-    type: Recreate
   template:
     metadata:
       labels:
         app: db-postgres
     spec:
       containers:
-      - env:
-        - name: POSTGRES_DB
-          value: postgres_db
-        - name: POSTGRES_PASSWORD
-          value: password
-        - name: POSTGRES_USER
-          value: postgres
-        image: postgres:latest
-        name: db-postgres
-        volumeMounts:
-        - mountPath: /var/lib/postgresql/data
-          name: postgredb
+        - name: db-postgres
+          env:
+            - name: POSTGRES_DB
+              value: postgres_db
+            - name: POSTGRES_PASSWORD
+              value: password
+            - name: POSTGRES_USER
+              value: postgres
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: db-postgres-storage
       restartPolicy: Always
       volumes:
-      - name: postgredb
-        persistentVolumeClaim:
-          claimName: db-postgres-pv-claim
+        - name: db-postgres-storage
+          persistentVolumeClaim:
+            claimName: db-postgres-pv-claim
